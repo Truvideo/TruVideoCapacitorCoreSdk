@@ -13,11 +13,74 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = Authentication()
-
     @objc func echo(_ call: CAPPluginCall) {
         let value = call.getString("value") ?? ""
+        print("Echo from iOS:", value)
         call.resolve([
-            "value": implementation.echo(value)
+            "value": value
         ])
     }
+
+      @objc func isAuthenticated(_ call: CAPPluginCall) {
+        let value = call.getString("value") ?? ""
+        let isAuthenticated = value == "valid_token"  // Mock logic for now
+        call.resolve([
+            "value": isAuthenticated ? "true" : "false"
+        ])
+    }
+
+        @objc func isAuthenticationExpired(_ call: CAPPluginCall) {
+        let value = call.getString("value") ?? ""
+        let isExpired = value == "expired_token"  // Mock logic for now
+        call.resolve([
+            "value": isExpired ? "true" : "false"
+        ])
+    }
+
+    @objc func generatePayload(_ call: CAPPluginCall) {
+        let value = call.getString("value") ?? ""
+        let payload = "Payload for \(value)"  // Example response
+        call.resolve([
+            "value": payload
+        ])
+    }
+
+    @objc func authenticate(_ call: CAPPluginCall) {
+        let value = call.getString("value") ?? ""
+        let authToken = "AuthToken_\(value)"  // Example token generation
+        call.resolve([
+            "value": authToken
+        ])
+    }
+
+    @objc func initAuthentication(_ call: CAPPluginCall) {
+        let value = call.getString("value") ?? ""
+        call.resolve([
+            "value": "Authentication initialized with \(value)"
+        ])
+    }
+
+    @objc func clearAuthentication(_ call: CAPPluginCall) {
+        call.resolve([
+            "value": "Authentication cleared"
+        ])
+    }
+
+    @objc func toSha256String(_ call: CAPPluginCall) {
+        let value = call.getString("value") ?? ""
+        let hash = sha256(value)
+        call.resolve([
+            "value": hash
+        ])
+    }
+
+    private func sha256(_ input: String) -> String {
+        guard let data = input.data(using: .utf8) else { return "" }
+        let hash = data.withUnsafeBytes { buffer in
+            [UInt8](buffer).map { String(format: "%02x", $0) }.joined()
+        }
+        return hash
+    }
+
+
 }
