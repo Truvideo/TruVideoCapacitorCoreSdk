@@ -10,14 +10,14 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "AuthenticationPlugin"
     public let jsName = "Authentication"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
-        CAPPluginMethod(name: "isAuthenticated", returnType: CAPPluginReturnPromise)
-        CAPPluginMethod(name: "isAuthenticationExpired", returnType: CAPPluginReturnPromise)
-        CAPPluginMethod(name: "generatePayload", returnType: CAPPluginReturnPromise)
-        CAPPluginMethod(name: "authenticate", returnType: CAPPluginReturnPromise)
-        CAPPluginMethod(name: "initAuthentication", returnType: CAPPluginReturnPromise)
-        CAPPluginMethod(name: "clearAuthentication", returnType: CAPPluginReturnPromise)
-        CAPPluginMethod(name: "toSha256String", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isAuthenticated", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isAuthenticationExpired", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "generatePayload", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "authenticate", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "initAuthentication", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clearAuthentication", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "toSha256String", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "sha256", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = Authentication()
