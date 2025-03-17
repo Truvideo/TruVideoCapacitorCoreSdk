@@ -13,11 +13,12 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = Authentication()
-
     @objc func echo(_ call: CAPPluginCall) {
         let value = call.getString("value") ?? ""
+        print("Echo from iOS:", value)
         call.resolve([
-            "value": implementation.echo(value)
+            "value": value
         ])
     }
+
 }
