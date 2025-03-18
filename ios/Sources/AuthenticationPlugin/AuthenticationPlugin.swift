@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import TruvideoSdk;
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -29,13 +30,24 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
         ])
     }
 
-      @objc func isAuthenticated(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        let isAuthenticated = value == "valid_token"  // Mock logic for now
-        call.resolve([
-            "value": isAuthenticated ? "true" : "false"
-        ])
+
+    @objc func isAuthenticated(_ call: CAPPluginCall) {
+        let isAuth = TruvideoSDK.isAuthenticated()  // ✅ Call the SDK method
+
+        print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth)")
+
+        let result: [String: Any] = ["isAuthenticated": isAuth]
+        call.resolve(result)  // ✅ Return result to JavaScript
     }
+
+    
+    //   @objc func isAuthenticated(_ call: CAPPluginCall) {
+    //     let value = call.getString("value") ?? ""
+    //     let isAuthenticated = value == "valid_token"  // Mock logic for now
+    //     call.resolve([
+    //         "value": isAuthenticated ? "true" : "false"
+    //     ])
+    // }
 
         @objc func isAuthenticationExpired(_ call: CAPPluginCall) {
         let value = call.getString("value") ?? ""
