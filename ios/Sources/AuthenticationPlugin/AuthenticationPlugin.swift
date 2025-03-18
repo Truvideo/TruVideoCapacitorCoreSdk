@@ -49,58 +49,93 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
     //     ])
     // }
 
-        @objc func isAuthenticationExpired(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        let isExpired = value == "expired_token"  // Mock logic for now
-        call.resolve([
-            "value": isExpired ? "true" : "false"
-        ])
+    @objc func isAuthenticationExpired(_ call: CAPPluginCall) {
+        let isExpired = (try? TruvideoSdk.isAuthenticationExpired()) ?? false  // Default to `false` if an error occurs
+
+        print("[AuthenticationPlugin] isAuthenticationExpired called. Result: \(isExpired)")
+
+        let result: [String: Any] = ["isAuthenticationExpired": String(describing: isExpired)]  // Convert Bool to String
+        call.resolve(result)
     }
 
     @objc func generatePayload(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        let payload = "Payload for \(value)"  // Example response
-        call.resolve([
-            "value": payload
-        ])
-    }
+        let payload = (try? TruvideoSdk.generatePayload()) ?? ""  // Default to empty string if an error occurs
 
+        print("[AuthenticationPlugin] generatePayload called. Result: \(payload)")
+
+        let result: [String: Any] = ["generatePayload": String(describing: payload)]  // Ensure consistency with Android
+        call.resolve(result)
+    }
     @objc func authenticate(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        let authToken = "AuthToken_\(value)"  // Example token generation
-        call.resolve([
-            "value": authToken
-        ])
+    guard let apiKey = call.getString("apiKey"),
+          let payload = call.getString("payload"),
+          let signature = call.getString("signature"),
+          let externalId = call.getString("externalId") else {
+        call.reject("Missing required parameters")
+        return
     }
 
-    @objc func initAuthentication(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": "Authentication initialized with \(value)"
-        ])
-    }
+    print("[AuthenticationPlugin] authenticate called")
 
-    @objc func clearAuthentication(_ call: CAPPluginCall) {
-        call.resolve([
-            "value": "Authentication cleared"
-        ])
-    }
-
-    @objc func toSha256String(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        let hash = sha256(value)
-        call.resolve([
-            "value": hash
-        ])
-    }
-
-    private func sha256(_ input: String) -> String {
-        guard let data = input.data(using: .utf8) else { return "" }
-        let hash = data.withUnsafeBytes { buffer in
-            [UInt8](buffer).map { String(format: "%02x", $0) }.joined()
+    TruvideoSdk.authenticate(apiKey: apiKey, payload: payload, signature: signature, externalId: externalId) { result in
+        switch result {
+        case .success:
+            print("[AuthenticationPlugin] authenticate success")
+            let response: [String: Any] = ["authenticate": "Authentication success"]
+            call.resolve(response)
+        case .failure(let error):
+            print("[AuthenticationPlugin] authenticate failed: \(error)")
+            call.reject(error.localizedDescription)
         }
-        return hash
+    }
+}
+
+@objc func initAuthentication(_ call: CAPPluginCall) {
+    print("[AuthenticationPlugin] initAuthentication called")
+
+    TruvideoSdk.initAuthentication { result in
+        switch result {
+        case .success:
+            print("[AuthenticationPlugin] initAuthentication success")
+            let response: [String: Any] = ["initAuthentication": "Init success"]
+            call.resolve(response)
+        case .failure(let error):
+            print("[AuthenticationPlugin] initAuthentication failed: \(error)")
+            call.reject(error.localizedDescription)
+        }
+    }
+}
+
+@objc func clearAuthentication(_ call: CAPPluginCall) {
+    TruvideoSdk.clearAuthentication()
+    print("[AuthenticationPlugin] clearAuthentication called")
+
+    let response: [String: Any] = ["clearAuthentication": "Clear success"]
+    call.resolve(response)
+}
+
+@objc func toSha256String(_ call: CAPPluginCall) {
+    guard let secretKey = call.getString("secretKey"),
+          let payload = call.getString("payload") else {
+        call.reject("Missing required parameters")
+        return
     }
 
+    do {
+        let keyData = Data(secretKey.utf8)
+        let payloadData = Data(payload.utf8)
+
+        let mac = try HMAC(key: keyData, variant: .sha256).authenticate(payloadData)
+        let hexString = mac.map { String(format: "%02hhx", $0) }.joined()
+
+        print("[AuthenticationPlugin] toSha256String success: \(hexString)")
+
+        let response: [String: Any] = ["signature": hexString]
+        call.resolve(response)
+    } catch {
+        print("[AuthenticationPlugin] toSha256String failed: \(error)")
+        call.reject(error.localizedDescription)
+    }
+}
 
 }
