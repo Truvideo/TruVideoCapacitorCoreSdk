@@ -32,11 +32,14 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
 
 
     @objc func isAuthenticated(_ call: CAPPluginCall) {
-        let isAuth = try? TruvideoSdk.isAuthenticated()
-        print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth ?? false)")
-        let result: [String: Any] = ["isAuthenticated": isAuth ?? "true"]
-        call.resolve(result)  //
-    }
+    let isAuth = try? TruvideoSdk.isAuthenticated() ?? false  // ✅ Ensure it defaults to `false`
+    
+    print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth)")
+    
+    let result: [String: Any] = ["isAuthenticated": isAuth]  // ✅ Keep type consistency (Boolean)
+    call.resolve(result)
+}
+
     
     //   @objc func isAuthenticated(_ call: CAPPluginCall) {
     //     let value = call.getString("value") ?? ""
