@@ -32,7 +32,7 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
 
 
     @objc func isAuthenticated(_ call: CAPPluginCall) {
-        let isAuth = TruvideoSDK.isAuthenticated()  // ✅ Call the SDK method
+        let isAuth = TruvideoSdk.isAuthenticated()  // ✅ Call the SDK method
 
         print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth)")
 
