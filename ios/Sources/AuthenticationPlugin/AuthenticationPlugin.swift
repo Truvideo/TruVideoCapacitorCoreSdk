@@ -30,15 +30,15 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
         ])
     }
 
-
     @objc func isAuthenticated(_ call: CAPPluginCall) {
-    let isAuth = try? TruvideoSdk.isAuthenticated() ?? false  // ✅ Ensure it defaults to `false`
-    
+    let isAuth = (try? TruvideoSdk.isAuthenticated()) ?? false  // Default to `false` if an error occurs
+
     print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth)")
-    
-    let result: [String: Any] = ["isAuthenticated": isAuth]  // ✅ Keep type consistency (Boolean)
+
+    let result: [String: Any] = ["isAuthenticated": String(describing: isAuth)]  // Convert Bool to String
     call.resolve(result)
 }
+
 
     
     //   @objc func isAuthenticated(_ call: CAPPluginCall) {
