@@ -19,7 +19,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
-                .product(name: "TruvideoSDK", package: "truvideo-sdk-ios-core") // Add Truvideo SDK
+                .product(name: "TruvideoSdk", package: "truvideo-sdk-ios-core")
             ],
             path: "ios/Sources/AuthenticationPlugin"),
         .testTarget(
