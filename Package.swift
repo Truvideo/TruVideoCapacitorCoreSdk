@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "TruvideoCapacitorCoremoduleSdk",
+    name: "TruvideoCapacitorCoreSdk",
     platforms: [.iOS(.v14)],
     products: [
         .library(
-            name: "TruvideoCapacitorCoremoduleSdk",
+            name: "TruvideoCapacitorCoreSdk",
             targets: ["AuthenticationPlugin"])
     ],
     dependencies: [
