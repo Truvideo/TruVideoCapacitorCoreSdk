@@ -1,4 +1,4 @@
 import type { AuthenticationPlugin } from './definitions';
-declare const Authentication: AuthenticationPlugin;
+declare const TruVideoSdkCore: AuthenticationPlugin;
 export * from './definitions';
-export { Authentication };
+export { TruVideoSdkCore };

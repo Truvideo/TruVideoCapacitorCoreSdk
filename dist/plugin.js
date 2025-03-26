@@ -1,9 +1,9 @@
 var capacitorAuthentication = (function (exports, core) {
 	'use strict';
 
-	const Authentication = core.registerPlugin('Authentication');
+	const TruVideoSdkCore = core.registerPlugin('Authentication');
 
-	exports.Authentication = Authentication;
+	exports.TruVideoSdkCore = TruVideoSdkCore;
 
 	return exports;
 

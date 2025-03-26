@@ -1,8 +1,5 @@
 import { registerPlugin } from '@capacitor/core';
-const Authentication = registerPlugin('Authentication');
-// const Authentication = registerPlugin<AuthenticationPlugin>('Authentication', {
-//   web: () => import('./web').then((m) => new m.AuthenticationWeb()),
-// });
+const TruVideoSdkCore = registerPlugin('Authentication');
 export * from './definitions';
-export { Authentication };
+export { TruVideoSdkCore };
 //# sourceMappingURL=index.js.map
