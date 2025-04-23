@@ -2,7 +2,7 @@
 
 var core = require('@capacitor/core');
 
-const Authentication = core.registerPlugin('Authentication');
+const TruVideoSdkCore = core.registerPlugin('Authentication');
 
-exports.Authentication = Authentication;
+exports.TruVideoSdkCore = TruVideoSdkCore;
 //# sourceMappingURL=plugin.cjs.js.map

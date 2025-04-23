@@ -1,11 +1,11 @@
-# truvideo-capacitor-coremodule-sdk
+# truvideo-capacitor-core-sdk
 
 Core Module
 
 ## Install
 
 ```bash
-npm install truvideo-capacitor-coremodule-sdk
+npm install truvideo-capacitor-core-sdk
 npx cap sync
 ```
 
