@@ -4,6 +4,21 @@ export interface AuthenticationPlugin {
     }): Promise<{
         value: string;
     }>;
+    environment(options: {
+        value: string;
+    }): Promise<{
+        value: string;
+    }>;
+    version(options: {
+        value: string;
+    }): Promise<{
+        value: string;
+    }>;
+    getApiKey(options: {
+        value: string;
+    }): Promise<{
+        value: string;
+    }>;
     isAuthenticated(options: {
         value: string;
     }): Promise<{

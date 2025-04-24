@@ -14,6 +14,9 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
+* [`environment(...)`](#environment)
+* [`version(...)`](#version)
+* [`getApiKey(...)`](#getapikey)
 * [`isAuthenticated(...)`](#isauthenticated)
 * [`isAuthenticationExpired(...)`](#isauthenticationexpired)
 * [`generatePayload(...)`](#generatepayload)
@@ -31,6 +34,51 @@ npx cap sync
 
 ```typescript
 echo(options: { value: string; }) => Promise<{ value: string; }>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ value: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### environment(...)
+
+```typescript
+environment(options: { value: string; }) => Promise<{ value: string; }>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ value: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### version(...)
+
+```typescript
+version(options: { value: string; }) => Promise<{ value: string; }>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ value: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### getApiKey(...)
+
+```typescript
+getApiKey(options: { value: string; }) => Promise<{ value: string; }>
 ```
 
 | Param         | Type                            |
