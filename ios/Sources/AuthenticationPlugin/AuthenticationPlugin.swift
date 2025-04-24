@@ -49,13 +49,13 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func version(_ call: CAPPluginCall) {
         let isAuth = (try? TruvideoSdk.version) ?? false
         print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth)")
-        call.resolve(["isAuthenticated": isAuth])
+        call.resolve(["version": isAuth])
     }
     
     @objc func getApiKey(_ call: CAPPluginCall) {
         let isAuth = (try? TruvideoSdk.getApiKey()) ?? false
         print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth)")
-        call.resolve(["isAuthenticated": isAuth])
+        call.resolve(["apiKey": isAuth])
     }
     
     
