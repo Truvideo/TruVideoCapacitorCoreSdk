@@ -35,11 +35,28 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
     }
     
     @objc func isAuthenticated(_ call: CAPPluginCall) {
-        let isAuth = (try? TruvideoSdk.isAuthenticated()) ?? false
-        print("[AuthenticationPlugin] isAuthenticated called. Result: \(isAuth)")
-        call.resolve(["isAuthenticated": isAuth])
+        //let isAuth = (try? TruvideoSdk.isAuthenticated()) ?? false
+        print("[AuthenticationPlugin] isAuthenticated called. Result: \("")")
+        call.resolve(["isAuthenticated": ""])
     }
     
+    @objc func environment(_ call: CAPPluginCall) {
+        //let isAuth = (try? TruvideoSdk.environment) ?? false
+        print("[AuthenticationPlugin] isAuthenticated called. Result: \("")")
+        call.resolve(["environment": ""])
+    }
+    
+    @objc func version(_ call: CAPPluginCall) {
+        //let isAuth = (try? TruvideoSdk.version) ?? false
+        print("[AuthenticationPlugin] isAuthenticated called. Result: \("")")
+        call.resolve(["version": ""])
+    }
+    
+    @objc func getApiKey(_ call: CAPPluginCall) {
+        //let isAuth = (try? TruvideoSdk.getApiKey()) ?? false
+        print("[AuthenticationPlugin] isAuthenticated called. Result: ")
+        call.resolve(["apiKey": ""])
+    }
     
     
     @objc func isAuthenticationExpired(_ call: CAPPluginCall) {

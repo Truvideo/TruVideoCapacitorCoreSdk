@@ -22,6 +22,54 @@
         "slug": "echo"
       },
       {
+        "name": "environment",
+        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ value: string; }"
+          }
+        ],
+        "returns": "Promise<{ value: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "environment"
+      },
+      {
+        "name": "version",
+        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ value: string; }"
+          }
+        ],
+        "returns": "Promise<{ value: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "version"
+      },
+      {
+        "name": "getApiKey",
+        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ value: string; }"
+          }
+        ],
+        "returns": "Promise<{ value: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "getapikey"
+      },
+      {
         "name": "isAuthenticated",
         "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
         "parameters": [

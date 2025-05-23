@@ -31,6 +31,19 @@ export class AuthenticationWeb extends WebPlugin implements AuthenticationPlugin
     console.log('authenticate', options);
     return options;
   }
+
+  async environment(options: { value: string; }): Promise<{ value: string; }> {
+    console.log('authenticate', options);
+    return options;
+  }
+  async version(options: { value: string; }): Promise<{ value: string; }> {
+    console.log('authenticate', options);
+    return options;
+  }
+  async getApiKey(options: { value: string; }): Promise<{ value: string; }> {
+    console.log('authenticate', options);
+    return options;
+  }
   async initAuthentication(options: { value: string; }): Promise<{ value: string; }> {
     console.log('initAuthentication', options);
     return options;

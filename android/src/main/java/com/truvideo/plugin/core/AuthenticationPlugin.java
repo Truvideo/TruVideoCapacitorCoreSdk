@@ -36,12 +36,40 @@ public class AuthenticationPlugin extends Plugin {
     }
 
 
+
     @PluginMethod
     public void isAuthenticated(PluginCall call){
         Boolean isAuth = TruvideoSdk.isAuthenticated();
         JSObject ret = new JSObject();
         Log.i("Echo", "isAuthenticated");
         ret.put("isAuthenticated", implementation.echo(isAuth.toString()));
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void version(PluginCall call){
+        String isAuth = TruvideoSdk.getVersion();
+        JSObject ret = new JSObject();
+        Log.i("Echo", "version");
+        ret.put("version", implementation.echo(isAuth));
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void getApiKey(PluginCall call){
+        String isAuth = TruvideoSdk.getApiKey();
+        JSObject ret = new JSObject();
+        Log.i("Echo", "apikey");
+        ret.put("apiKey", implementation.echo(isAuth));
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void environment(PluginCall call){
+        String isAuth = TruvideoSdk.getEnvironment();
+        JSObject ret = new JSObject();
+        Log.i("Echo", "environment");
+        ret.put("environment", implementation.echo(isAuth));
         call.resolve(ret);
     }
 
