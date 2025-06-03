@@ -1,14 +1,49 @@
 export interface AuthenticationPlugin {
+  /**
+   * Echo test method.
+   */
   echo(options: { value: string }): Promise<{ value: string }>;
-  environment(options: { value: string }): Promise<{ value: string }>;
-  version(options: { value: string }): Promise<{ value: string }>;
-  getApiKey(options: { value: string }): Promise<{ value: string }>;
-  isAuthenticated(options: { value: string }): Promise<{ value: string }>;
-  isAuthenticationExpired(options: { value: string }): Promise<{ value: string }>;
-  generatePayload(options: { value: string }): Promise<{ value: string }>;
-  authenticate(options: { value: string }): Promise<{ value: string }>;
-  initAuthentication(options: { value: string }): Promise<{ value: string }>;
-  clearAuthentication(options: { value: string }): Promise<{ value: string }>;
-  toSha256String(options: { value: string }): Promise<{ value: string }>;
 
+  /**
+   * Checks if the user is authenticated.
+   */
+  isAuthenticated(): Promise<{ isAuthenticated: boolean }>;
+
+  /**
+   * Checks if the authentication has expired.
+   */
+  isAuthenticationExpired(): Promise<{ isAuthenticationExpired: boolean }>;
+
+  /**
+   * Generates the payload used for authentication.
+   */
+  generatePayload(): Promise<{ generatePayload: string }>;
+
+  /**
+   * Performs authentication using the provided parameters.
+   */
+  authenticate(options: {
+    apiKey: string;
+    payload: string;
+    signature: string;
+    externalId: string;
+  }): Promise<{ authenticate: string }>;
+
+  /**
+   * Initializes the authentication system.
+   */
+  initAuthentication(): Promise<{ initAuthentication: string }>;
+
+  /**
+   * Clears the authentication session.
+   */
+  clearAuthentication(): Promise<{ clearAuthentication: string }>;
+
+  /**
+   * Converts a payload to a SHA256 HMAC signature using a secret key.
+   */
+  toSha256String(options: {
+    secretKey: string;
+    payload: string;
+  }): Promise<{ signature: string }>;
 }

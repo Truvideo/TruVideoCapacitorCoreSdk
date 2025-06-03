@@ -14,15 +14,12 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
-* [`environment(...)`](#environment)
-* [`version(...)`](#version)
-* [`getApiKey(...)`](#getapikey)
-* [`isAuthenticated(...)`](#isauthenticated)
-* [`isAuthenticationExpired(...)`](#isauthenticationexpired)
-* [`generatePayload(...)`](#generatepayload)
+* [`isAuthenticated()`](#isauthenticated)
+* [`isAuthenticationExpired()`](#isauthenticationexpired)
+* [`generatePayload()`](#generatepayload)
 * [`authenticate(...)`](#authenticate)
-* [`initAuthentication(...)`](#initauthentication)
-* [`clearAuthentication(...)`](#clearauthentication)
+* [`initAuthentication()`](#initauthentication)
+* [`clearAuthentication()`](#clearauthentication)
 * [`toSha256String(...)`](#tosha256string)
 
 </docgen-index>
@@ -36,20 +33,7 @@ npx cap sync
 echo(options: { value: string; }) => Promise<{ value: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
-
---------------------
-
-
-### environment(...)
-
-```typescript
-environment(options: { value: string; }) => Promise<{ value: string; }>
-```
+Echo test method.
 
 | Param         | Type                            |
 | ------------- | ------------------------------- |
@@ -60,77 +44,41 @@ environment(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
-### version(...)
+### isAuthenticated()
 
 ```typescript
-version(options: { value: string; }) => Promise<{ value: string; }>
+isAuthenticated() => Promise<{ isAuthenticated: boolean; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Checks if the user is authenticated.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ isAuthenticated: boolean; }&gt;</code>
 
 --------------------
 
 
-### getApiKey(...)
+### isAuthenticationExpired()
 
 ```typescript
-getApiKey(options: { value: string; }) => Promise<{ value: string; }>
+isAuthenticationExpired() => Promise<{ isAuthenticationExpired: boolean; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Checks if the authentication has expired.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ isAuthenticationExpired: boolean; }&gt;</code>
 
 --------------------
 
 
-### isAuthenticated(...)
+### generatePayload()
 
 ```typescript
-isAuthenticated(options: { value: string; }) => Promise<{ value: string; }>
+generatePayload() => Promise<{ generatePayload: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Generates the payload used for authentication.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
-
---------------------
-
-
-### isAuthenticationExpired(...)
-
-```typescript
-isAuthenticationExpired(options: { value: string; }) => Promise<{ value: string; }>
-```
-
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
-
---------------------
-
-
-### generatePayload(...)
-
-```typescript
-generatePayload(options: { value: string; }) => Promise<{ value: string; }>
-```
-
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ generatePayload: string; }&gt;</code>
 
 --------------------
 
@@ -138,44 +86,42 @@ generatePayload(options: { value: string; }) => Promise<{ value: string; }>
 ### authenticate(...)
 
 ```typescript
-authenticate(options: { value: string; }) => Promise<{ value: string; }>
+authenticate(options: { apiKey: string; payload: string; signature: string; externalId: string; }) => Promise<{ authenticate: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Performs authentication using the provided parameters.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+| Param         | Type                                                                                     |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ apiKey: string; payload: string; signature: string; externalId: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ authenticate: string; }&gt;</code>
 
 --------------------
 
 
-### initAuthentication(...)
+### initAuthentication()
 
 ```typescript
-initAuthentication(options: { value: string; }) => Promise<{ value: string; }>
+initAuthentication() => Promise<{ initAuthentication: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Initializes the authentication system.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ initAuthentication: string; }&gt;</code>
 
 --------------------
 
 
-### clearAuthentication(...)
+### clearAuthentication()
 
 ```typescript
-clearAuthentication(options: { value: string; }) => Promise<{ value: string; }>
+clearAuthentication() => Promise<{ clearAuthentication: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Clears the authentication session.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ clearAuthentication: string; }&gt;</code>
 
 --------------------
 
@@ -183,14 +129,16 @@ clearAuthentication(options: { value: string; }) => Promise<{ value: string; }>
 ### toSha256String(...)
 
 ```typescript
-toSha256String(options: { value: string; }) => Promise<{ value: string; }>
+toSha256String(options: { secretKey: string; payload: string; }) => Promise<{ signature: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Converts a payload to a SHA256 HMAC signature using a secret key.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+| Param         | Type                                                 |
+| ------------- | ---------------------------------------------------- |
+| **`options`** | <code>{ secretKey: string; payload: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ signature: string; }&gt;</code>
 
 --------------------
 

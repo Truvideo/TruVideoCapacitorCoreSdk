@@ -17,167 +17,89 @@
         ],
         "returns": "Promise<{ value: string; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Echo test method.",
         "complexTypes": [],
         "slug": "echo"
       },
       {
-        "name": "environment",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [],
-        "slug": "environment"
-      },
-      {
-        "name": "version",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [],
-        "slug": "version"
-      },
-      {
-        "name": "getApiKey",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [],
-        "slug": "getapikey"
-      },
-      {
         "name": "isAuthenticated",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
+        "signature": "() => Promise<{ isAuthenticated: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ isAuthenticated: boolean; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Checks if the user is authenticated.",
         "complexTypes": [],
         "slug": "isauthenticated"
       },
       {
         "name": "isAuthenticationExpired",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
+        "signature": "() => Promise<{ isAuthenticationExpired: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ isAuthenticationExpired: boolean; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Checks if the authentication has expired.",
         "complexTypes": [],
         "slug": "isauthenticationexpired"
       },
       {
         "name": "generatePayload",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
+        "signature": "() => Promise<{ generatePayload: string; }>",
+        "parameters": [],
+        "returns": "Promise<{ generatePayload: string; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Generates the payload used for authentication.",
         "complexTypes": [],
         "slug": "generatepayload"
       },
       {
         "name": "authenticate",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
+        "signature": "(options: { apiKey: string; payload: string; signature: string; externalId: string; }) => Promise<{ authenticate: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ value: string; }"
+            "type": "{ apiKey: string; payload: string; signature: string; externalId: string; }"
           }
         ],
-        "returns": "Promise<{ value: string; }>",
+        "returns": "Promise<{ authenticate: string; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Performs authentication using the provided parameters.",
         "complexTypes": [],
         "slug": "authenticate"
       },
       {
         "name": "initAuthentication",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
+        "signature": "() => Promise<{ initAuthentication: string; }>",
+        "parameters": [],
+        "returns": "Promise<{ initAuthentication: string; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Initializes the authentication system.",
         "complexTypes": [],
         "slug": "initauthentication"
       },
       {
         "name": "clearAuthentication",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ value: string; }"
-          }
-        ],
-        "returns": "Promise<{ value: string; }>",
+        "signature": "() => Promise<{ clearAuthentication: string; }>",
+        "parameters": [],
+        "returns": "Promise<{ clearAuthentication: string; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Clears the authentication session.",
         "complexTypes": [],
         "slug": "clearauthentication"
       },
       {
         "name": "toSha256String",
-        "signature": "(options: { value: string; }) => Promise<{ value: string; }>",
+        "signature": "(options: { secretKey: string; payload: string; }) => Promise<{ signature: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ value: string; }"
+            "type": "{ secretKey: string; payload: string; }"
           }
         ],
-        "returns": "Promise<{ value: string; }>",
+        "returns": "Promise<{ signature: string; }>",
         "tags": [],
-        "docs": "",
+        "docs": "Converts a payload to a SHA256 HMAC signature using a secret key.",
         "complexTypes": [],
         "slug": "tosha256string"
       }
