@@ -1,6 +1,6 @@
 {
-  "name": "truvideo-capacitor-core-sdk",
-  "version": "0.0.1",
+  "name": "@trunpm/truvideo-capacitor-core-sdk",
+  "version": "0.0.3",
   "description": "Core Module",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -13,7 +13,8 @@
     "ios/Sources",
     "ios/Tests",
     "Package.swift",
-    "TruvideoCapacitorCoreSdk.podspec"
+    "TruvideoCapacitorCoreSdk.podspec",
+    "TrunpmTruvideoCapacitorCoreSdk.podspec"
   ],
   "author": "Tru Video",
   "license": "MIT",
@@ -29,6 +30,13 @@
     "plugin",
     "native"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "restricted"
+  },
+  "ios": {
+    "podspec": "TruvideoCapacitorCoreSdk.podspec"
+  },
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "xcodebuild -scheme TruvideoCapacitorCoreSdk -destination generic/platform=iOS",
@@ -76,5 +84,9 @@
     "android": {
       "src": "android"
     }
-  }
+  },
+  "dependencies": {
+    
+  },
+  "homepage": "https://github.com/Truvideo/TruVideoCapacitorCoreSdk.git#readme"
 }
