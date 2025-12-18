@@ -1,0 +1,6 @@
+projectKey=TruVideoCapacitorCoreSdk
+serverUrl=http://localhost:9000
+serverVersion=25.11.0.114957
+dashboardUrl=http://localhost:9000/dashboard?id=TruVideoCapacitorCoreSdk
+ceTaskId=9092ea38-0ae0-4092-b083-8eccf155a380
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9092ea38-0ae0-4092-b083-8eccf155a380
