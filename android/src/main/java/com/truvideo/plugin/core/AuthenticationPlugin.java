@@ -1,6 +1,5 @@
 package com.truvideo.plugin.core;
 
-import static com.truvideo.sdk.core.TruvideoSdk.TruvideoSdk;
 
 import androidx.annotation.NonNull;
 import android.util.Log;
@@ -10,6 +9,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.truvideo.sdk.core.TruvideoSdk;
 import com.truvideo.sdk.core.interfaces.TruvideoSdkCallback;
 
 import java.security.InvalidKeyException;
@@ -39,7 +39,7 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void isAuthenticated(PluginCall call){
-        Boolean isAuth = TruvideoSdk.isAuthenticated();
+        Boolean isAuth = TruvideoSdk.getInstance().isAuthenticated();
         JSObject ret = new JSObject();
         Log.i("Echo", "isAuthenticated");
         ret.put("isAuthenticated", implementation.echo(isAuth.toString()));
@@ -48,7 +48,7 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void version(PluginCall call){
-        String isAuth = TruvideoSdk.getVersion();
+        String isAuth = TruvideoSdk.getInstance().getVersion();
         JSObject ret = new JSObject();
         Log.i("Echo", "version");
         ret.put("version", implementation.echo(isAuth));
@@ -57,7 +57,7 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void getApiKey(PluginCall call){
-        String isAuth = TruvideoSdk.getApiKey();
+        String isAuth = TruvideoSdk.getInstance().getApiKey();
         JSObject ret = new JSObject();
         Log.i("Echo", "apikey");
         ret.put("apiKey", implementation.echo(isAuth));
@@ -66,7 +66,7 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void environment(PluginCall call){
-        String isAuth = TruvideoSdk.getEnvironment();
+        String isAuth = TruvideoSdk.getInstance().getEnvironment();
         JSObject ret = new JSObject();
         Log.i("Echo", "environment");
         ret.put("environment", implementation.echo(isAuth));
@@ -75,7 +75,7 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void isAuthenticationExpired(PluginCall call){
-        Boolean isAuth = TruvideoSdk.isAuthenticationExpired();
+        Boolean isAuth = TruvideoSdk.getInstance().isAuthenticationExpired();
         JSObject ret = new JSObject();
         Log.i("Echo", "isAuthenticationExpired");
         ret.put("isAuthenticationExpired", implementation.echo(isAuth.toString()));
@@ -84,7 +84,7 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void generatePayload(PluginCall call){
-        String generatePayload = TruvideoSdk.generatePayload();
+        String generatePayload = TruvideoSdk.getInstance().generatePayload();
         JSObject ret = new JSObject();
         Log.i("Echo", "generatePayload");
         ret.put("generatePayload", implementation.echo(generatePayload));
@@ -101,7 +101,7 @@ public class AuthenticationPlugin extends Plugin {
             return;
         }
         Log.i("Echo", "authenticate call ");
-        TruvideoSdk.authenticate(apiKey, payload, signature,externalId,
+        TruvideoSdk.getInstance().authenticate(apiKey, payload, signature,externalId,
                 new TruvideoSdkCallback<>(){
                     @Override
                     public void onComplete(Unit unit) {
@@ -123,7 +123,7 @@ public class AuthenticationPlugin extends Plugin {
     @PluginMethod
     public void initAuthentication(PluginCall call){
         Log.i("Echo", "initAuthentication call");
-        TruvideoSdk.initAuthentication(new TruvideoSdkCallback<>() {
+        TruvideoSdk.getInstance().initAuthentication(new TruvideoSdkCallback<>() {
             @Override
             public void onComplete(Unit unit) {
                 // Authentication ready
@@ -146,7 +146,7 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void clearAuthentication(PluginCall call){
-        TruvideoSdk.clearAuthentication();
+        TruvideoSdk.getInstance().clearAuthentication();
         JSObject ret = new JSObject();
         ret.put("clearAuthentication", implementation.echo("Clear success"));
         call.resolve(ret);
