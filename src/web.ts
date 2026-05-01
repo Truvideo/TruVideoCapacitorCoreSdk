@@ -36,14 +36,19 @@ export class AuthenticationWeb extends WebPlugin implements AuthenticationPlugin
     console.log('authenticate', options);
     return { authenticate: '' };
   }
-  async authenticateWithOtp(options: {
+  async authenticateWithOtp(options: { otp: string }): Promise<{ authenticateWithOtp: string }> {
+    console.log('authenticateWithOtp', options);
+    return { authenticateWithOtp: '' };
+  }
+
+  async generateOtp(options: {
     baseUrl: string;
     apiKey: string;
     secret: string;
     externalId: string;
-  }): Promise<{ authenticateWithOtp: string }> {
-    console.log('authenticateWithOtp', options);
-    return { authenticateWithOtp: '' };
+  }): Promise<{ generateOtp: string }> {
+    console.log('generateOtp', options);
+    return { generateOtp: '' };
   }
 
   async environment(options: { value: string; }): Promise<{ value: string; }> {

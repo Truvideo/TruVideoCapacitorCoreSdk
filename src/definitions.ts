@@ -40,15 +40,19 @@ export interface AuthenticationPlugin {
   clearAuthentication(): Promise<{ clearAuthentication: string }>;
 
   /**
-   * Converts a payload to a SHA256 HMAC signature using a secret key.
+   * Authenticates using a one-time passcode after the SDK is configured.
    */
+  authenticateWithOtp(options: { otp: string }): Promise<{ authenticateWithOtp: string }>;
 
-  authenticateWithOtp(options: {
+  /**
+   * Requests an OTP from the TruVideo HTTP API (HMAC-signed body).
+   */
+  generateOtp(options: {
     baseUrl: string;
     apiKey: string;
     secret: string;
     externalId: string;
-  }): Promise<{ authenticateWithOtp: string }>;
+  }): Promise<{ generateOtp: string }>;
 
   toSha256String(options: {
     secretKey: string;

@@ -19,6 +19,10 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(
             name: "authenticate", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(
+            name: "authenticateWithOtp", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(
+            name: "generateOtp", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(
             name: "initAuthentication", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(
             name: "clearAuthentication", returnType: CAPPluginReturnPromise),
@@ -163,8 +167,195 @@ public class AuthenticationPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
-    
-    
+
+    /// Pure HTTP OTP generation (same contract as Android / React Native `generateOtp`).
+    @objc func generateOtp(_ call: CAPPluginCall) {
+        guard let baseUrl = call.getString("baseUrl"),
+              let apiKey = call.getString("apiKey"),
+              let secret = call.getString("secret"),
+              let externalId = call.getString("externalId") else {
+            call.reject("Missing baseUrl, apiKey, secret, or externalId", "OTP_GENERATE_ERROR", nil)
+            return
+        }
+
+        let trimmedApiKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedSecret = secret.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedExternalId = externalId.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedBase = baseUrl.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if trimmedApiKey.isEmpty {
+            call.reject("apiKey cannot be empty", "OTP_GENERATE_ERROR", nil)
+            return
+        }
+        if trimmedSecret.isEmpty {
+            call.reject("secret cannot be empty", "OTP_GENERATE_ERROR", nil)
+            return
+        }
+        if trimmedExternalId.isEmpty {
+            call.reject("externalId cannot be empty", "OTP_GENERATE_ERROR", nil)
+            return
+        }
+        if trimmedBase.isEmpty {
+            call.reject("baseUrl cannot be empty", "OTP_GENERATE_ERROR", nil)
+            return
+        }
+
+        print("[AuthenticationPlugin] generateOtp started")
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let cleanBase = Self.trimTrailingSlashes(trimmedBase)
+                let endpoint = "\(cleanBase)/api/v1/auth/otp/generate"
+                guard let url = URL(string: endpoint) else {
+                    throw NSError(domain: "OTP_GENERATE_ERROR", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid base URL"])
+                }
+
+                let bodyDict: [String: Any] = ["externalId": trimmedExternalId]
+                let bodyData = try JSONSerialization.data(withJSONObject: bodyDict, options: [])
+                guard let bodyString = String(data: bodyData, encoding: .utf8) else {
+                    throw NSError(domain: "OTP_GENERATE_ERROR", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to encode request body"])
+                }
+
+                guard let signature = Self.hmacSha256Hex(secret: trimmedSecret, payload: bodyString) else {
+                    throw NSError(domain: "OTP_GENERATE_ERROR", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to generate request signature"])
+                }
+
+                var request = URLRequest(url: url)
+                request.httpMethod = "POST"
+                request.timeoutInterval = 15
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.setValue(trimmedApiKey, forHTTPHeaderField: "x-authentication-api-key")
+                request.setValue(signature, forHTTPHeaderField: "x-authentication-signature")
+                request.httpBody = bodyData
+
+                let semaphore = DispatchSemaphore(value: 0)
+                var responseData: Data?
+                var responseError: Error?
+                var httpResponse: HTTPURLResponse?
+
+                let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                    responseData = data
+                    responseError = error
+                    httpResponse = response as? HTTPURLResponse
+                    semaphore.signal()
+                }
+                task.resume()
+                semaphore.wait()
+
+                if let err = responseError {
+                    throw err
+                }
+
+                let status = httpResponse?.statusCode ?? -1
+                let responseText = String(data: responseData ?? Data(), encoding: .utf8) ?? ""
+
+                guard status >= 200, status <= 299 else {
+                    let apiMsg = Self.parseJsonErrorMessage(responseText)
+                    let message: String
+                    if !apiMsg.isEmpty {
+                        message = "OTP generate failed (\(status)): \(apiMsg)"
+                    } else {
+                        message = "OTP generate failed with status \(status)"
+                    }
+                    throw NSError(domain: "OTP_GENERATE_ERROR", code: status, userInfo: [NSLocalizedDescriptionKey: message])
+                }
+
+                var otpValue = ""
+                if let obj = try? JSONSerialization.jsonObject(with: Data(responseText.utf8)) as? [String: Any] {
+                    otpValue = (obj["otp"] as? String) ?? ""
+                }
+                if otpValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    throw NSError(domain: "OTP_GENERATE_ERROR", code: 0, userInfo: [NSLocalizedDescriptionKey: "OTP not found in response"])
+                }
+
+                print("[AuthenticationPlugin] generateOtp success")
+                DispatchQueue.main.async {
+                    call.resolve(["generateOtp": otpValue])
+                }
+            } catch {
+                print("[AuthenticationPlugin] generateOtp error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    call.reject(error.localizedDescription, "OTP_GENERATE_ERROR", error)
+                }
+            }
+        }
+    }
+
+    private static func trimTrailingSlashes(_ s: String) -> String {
+        var r = s
+        while r.hasSuffix("/") {
+            r.removeLast()
+        }
+        return r
+    }
+
+    private static func hmacSha256Hex(secret: String, payload: String) -> String? {
+        guard let keyData = secret.data(using: .utf8),
+              let payloadData = payload.data(using: .utf8) else {
+            return nil
+        }
+        var hmac = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        keyData.withUnsafeBytes { kb in
+            payloadData.withUnsafeBytes { pb in
+                CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256), kb.baseAddress, keyData.count, pb.baseAddress, payloadData.count, &hmac)
+            }
+        }
+        return hmac.map { String(format: "%02x", $0) }.joined()
+    }
+
+    private static func parseJsonErrorMessage(_ responseText: String) -> String {
+        guard let data = responseText.data(using: .utf8),
+              let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return ""
+        }
+        let message = (obj["message"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !message.isEmpty {
+            return message
+        }
+        let detail = (obj["detail"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return detail
+    }
+
+    @objc func authenticateWithOtp(_ call: CAPPluginCall) {
+        ensureConfigured()
+
+        guard let otp = call.getString("otp") else {
+            print("[AuthenticationPlugin] authenticateWithOtp failed: Missing otp parameter")
+            call.reject("OTP is required", "AUTHENTICATION_FAILED", nil)
+            return
+        }
+
+        let trimmedOtp = otp.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmedOtp.isEmpty else {
+            print("[AuthenticationPlugin] authenticateWithOtp rejected: empty OTP")
+            call.reject("OTP cannot be empty", "AUTHENTICATION_FAILED", nil)
+            return
+        }
+
+        print("[AuthenticationPlugin] authenticateWithOtp called")
+
+        Task {
+            do {
+                try await TruvideoSdk.authenticate(otp: trimmedOtp)
+
+                let authenticated = TruvideoSdk.isAuthenticated
+                guard authenticated else {
+                    print("[AuthenticationPlugin] authenticateWithOtp: SDK reported not authenticated after OTP")
+                    call.reject("OTP authentication failed", "AUTHENTICATION_OTP_FAILED", nil)
+                    return
+                }
+
+                print("[AuthenticationPlugin] authenticateWithOtp success")
+                call.resolve(["authenticateWithOtp": "Authentication successful"])
+            } catch {
+                let errorMessage = "OTP authentication failed: \(error.localizedDescription)"
+                print("[AuthenticationPlugin] authenticateWithOtp error: \(errorMessage)")
+                call.reject(errorMessage, "AUTHENTICATION_OTP_FAILED", error)
+            }
+        }
+    }
+
     @objc func initAuthentication(_ call: CAPPluginCall) {
         print("[AuthenticationPlugin] initAuthentication called")
         ensureConfigured()
