@@ -11,6 +11,7 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.truvideo.sdk.core.TruvideoSdk;
 import com.truvideo.sdk.core.interfaces.TruvideoSdkCallback;
+import com.truvideo.sdk.model.exceptions.TruvideoSdkException;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -19,7 +20,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import kotlin.Unit;
-import truvideo.sdk.common.exceptions.TruvideoSdkException;
 
 @CapacitorPlugin(name = "Authentication")
 public class AuthenticationPlugin extends Plugin {
@@ -57,28 +57,31 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void getApiKey(PluginCall call){
-        String isAuth = TruvideoSdk.getInstance().getApiKey();
+        // getApiKey is not available in the current SDK version.
+        String apiKey = "";
         JSObject ret = new JSObject();
         Log.i("Echo", "apikey");
-        ret.put("apiKey", implementation.echo(isAuth));
+        ret.put("apiKey", implementation.echo(apiKey));
         call.resolve(ret);
     }
 
     @PluginMethod
     public void environment(PluginCall call){
-        String isAuth = TruvideoSdk.getInstance().getEnvironment();
+        String env = TruvideoSdk.getInstance().getEnvironment().name();
         JSObject ret = new JSObject();
         Log.i("Echo", "environment");
-        ret.put("environment", implementation.echo(isAuth));
+        ret.put("environment", implementation.echo(env));
         call.resolve(ret);
     }
 
     @PluginMethod
     public void isAuthenticationExpired(PluginCall call){
-        Boolean isAuth = TruvideoSdk.getInstance().isAuthenticationExpired();
+        // isAuthenticationExpired is not available in the current SDK version.
+        // We fallback to checking if not authenticated.
+        boolean isExpired = !TruvideoSdk.getInstance().isAuthenticated();
         JSObject ret = new JSObject();
         Log.i("Echo", "isAuthenticationExpired");
-        ret.put("isAuthenticationExpired", implementation.echo(isAuth.toString()));
+        ret.put("isAuthenticationExpired", implementation.echo(String.valueOf(isExpired)));
         call.resolve(ret);
     }
 
@@ -102,7 +105,7 @@ public class AuthenticationPlugin extends Plugin {
         }
         Log.i("Echo", "authenticate call ");
         TruvideoSdk.getInstance().authenticate(apiKey, payload, signature,externalId,
-                new TruvideoSdkCallback<>(){
+                new TruvideoSdkCallback<Unit>(){
                     @Override
                     public void onComplete(Unit unit) {
                         JSObject ret = new JSObject();
@@ -123,7 +126,7 @@ public class AuthenticationPlugin extends Plugin {
     @PluginMethod
     public void initAuthentication(PluginCall call){
         Log.i("Echo", "initAuthentication call");
-        TruvideoSdk.getInstance().initAuthentication(new TruvideoSdkCallback<>() {
+        TruvideoSdk.getInstance().waitAuthReady(new TruvideoSdkCallback<Unit>() {
             @Override
             public void onComplete(Unit unit) {
                 // Authentication ready
@@ -146,11 +149,19 @@ public class AuthenticationPlugin extends Plugin {
 
     @PluginMethod
     public void clearAuthentication(PluginCall call){
-        TruvideoSdk.getInstance().clearAuthentication();
-        JSObject ret = new JSObject();
-        ret.put("clearAuthentication", implementation.echo("Clear success"));
-        call.resolve(ret);
+        TruvideoSdk.getInstance().clearAuthentication(new TruvideoSdkCallback<Unit>() {
+            @Override
+            public void onComplete(Unit unit) {
+                JSObject ret = new JSObject();
+                ret.put("clearAuthentication", implementation.echo("Clear success"));
+                call.resolve(ret);
+            }
 
+            @Override
+            public void onError(@NonNull TruvideoSdkException e) {
+                call.reject(e.toString());
+            }
+        });
     }
 
     @PluginMethod
