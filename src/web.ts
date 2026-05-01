@@ -7,29 +7,43 @@ export class AuthenticationWeb extends WebPlugin implements AuthenticationPlugin
     console.log('ECHO', options);
     return options;
   }
-  async toSha256String(options: { value: string; }): Promise<{ value: string; }> {
+  async toSha256String(options: { secretKey: string; payload: string }): Promise<{ signature: string }> {
     console.log('toSha256String', options);
-    return options;
+    return { signature: '' };
   }
-  async clearAuthentication(options: { value: string; }): Promise<{ value: string; }> {
-    console.log('clearAuthentication', options);
-    return options;
+  async clearAuthentication(): Promise<{ clearAuthentication: string }> {
+    console.log('clearAuthentication');
+    return { clearAuthentication: '' };
   }
-  async isAuthenticated(options: { value: string }): Promise<{ value: string }> {
-    console.log('isAuthenticated', options);
-    return options;
+  async isAuthenticated(): Promise<{ isAuthenticated: boolean }> {
+    console.log('isAuthenticated');
+    return { isAuthenticated: false };
   }
-  async isAuthenticationExpired(options: { value: string; }): Promise<{ value: string; }> {
-    console.log('isAuthenticationExpired', options);
-    return options;
+  async isAuthenticationExpired(): Promise<{ isAuthenticationExpired: boolean }> {
+    console.log('isAuthenticationExpired');
+    return { isAuthenticationExpired: false };
   }
-  async generatePayload(options: { value: string; }): Promise<{ value: string; }> {
-    console.log('generatePayload', options);
-    return options;
+  async generatePayload(): Promise<{ generatePayload: string }> {
+    console.log('generatePayload');
+    return { generatePayload: '' };
   }
-  async authenticate(options: { value: string; }): Promise<{ value: string; }> {
+  async authenticate(options: {
+    apiKey: string;
+    payload: string;
+    signature: string;
+    externalId: string;
+  }): Promise<{ authenticate: string }> {
     console.log('authenticate', options);
-    return options;
+    return { authenticate: '' };
+  }
+  async authenticateWithOtp(options: {
+    baseUrl: string;
+    apiKey: string;
+    secret: string;
+    externalId: string;
+  }): Promise<{ authenticateWithOtp: string }> {
+    console.log('authenticateWithOtp', options);
+    return { authenticateWithOtp: '' };
   }
 
   async environment(options: { value: string; }): Promise<{ value: string; }> {
@@ -44,9 +58,9 @@ export class AuthenticationWeb extends WebPlugin implements AuthenticationPlugin
     console.log('authenticate', options);
     return options;
   }
-  async initAuthentication(options: { value: string; }): Promise<{ value: string; }> {
-    console.log('initAuthentication', options);
-    return options;
+  async initAuthentication(): Promise<{ initAuthentication: string }> {
+    console.log('initAuthentication');
+    return { initAuthentication: '' };
   }
 
 }

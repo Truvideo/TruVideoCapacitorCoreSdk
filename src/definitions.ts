@@ -42,6 +42,14 @@ export interface AuthenticationPlugin {
   /**
    * Converts a payload to a SHA256 HMAC signature using a secret key.
    */
+
+  authenticateWithOtp(options: {
+    baseUrl: string;
+    apiKey: string;
+    secret: string;
+    externalId: string;
+  }): Promise<{ authenticateWithOtp: string }>;
+
   toSha256String(options: {
     secretKey: string;
     payload: string;
