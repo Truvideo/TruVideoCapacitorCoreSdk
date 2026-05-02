@@ -261,19 +261,19 @@ public class AuthenticationPlugin extends Plugin {
         String externalId = call.getString("externalId");
 
         if (isBlank(apiKey)) {
-            call.reject("apiKey cannot be empty", "OTP_GENERATE_ERROR", null);
+            call.reject("apiKey cannot be empty", "OTP_GENERATE_ERROR", (Exception) null);
             return;
         }
         if (isBlank(secret)) {
-            call.reject("secret cannot be empty", "OTP_GENERATE_ERROR", null);
+            call.reject("secret cannot be empty", "OTP_GENERATE_ERROR", (Exception) null);
             return;
         }
         if (isBlank(externalId)) {
-            call.reject("externalId cannot be empty", "OTP_GENERATE_ERROR", null);
+            call.reject("externalId cannot be empty", "OTP_GENERATE_ERROR", (Exception) null);
             return;
         }
         if (isBlank(baseUrl)) {
-            call.reject("baseUrl cannot be empty", "OTP_GENERATE_ERROR", null);
+            call.reject("baseUrl cannot be empty", "OTP_GENERATE_ERROR", (Exception) null);
             return;
         }
 
@@ -350,7 +350,7 @@ public class AuthenticationPlugin extends Plugin {
     public void authenticateWithOtp(PluginCall call) {
         String otp = call.getString("otp");
         if (isBlank(otp)) {
-            call.reject("OTP cannot be empty", "OTP_AUTH_ERROR", null);
+            call.reject("OTP cannot be empty", "OTP_AUTH_ERROR", (Exception) null);
             return;
         }
         final String trimmedOtp = otp.trim();
