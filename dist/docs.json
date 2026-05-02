@@ -88,6 +88,38 @@
         "slug": "clearauthentication"
       },
       {
+        "name": "authenticateWithOtp",
+        "signature": "(options: { otp: string; }) => Promise<{ authenticateWithOtp: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ otp: string; }"
+          }
+        ],
+        "returns": "Promise<{ authenticateWithOtp: string; }>",
+        "tags": [],
+        "docs": "Authenticates using a one-time passcode after the SDK is configured.",
+        "complexTypes": [],
+        "slug": "authenticatewithotp"
+      },
+      {
+        "name": "generateOtp",
+        "signature": "(options: { baseUrl: string; apiKey: string; secret: string; externalId: string; }) => Promise<{ generateOtp: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ baseUrl: string; apiKey: string; secret: string; externalId: string; }"
+          }
+        ],
+        "returns": "Promise<{ generateOtp: string; }>",
+        "tags": [],
+        "docs": "Requests an OTP from the TruVideo HTTP API (HMAC-signed body).",
+        "complexTypes": [],
+        "slug": "generateotp"
+      },
+      {
         "name": "toSha256String",
         "signature": "(options: { secretKey: string; payload: string; }) => Promise<{ signature: string; }>",
         "parameters": [
@@ -99,7 +131,7 @@
         ],
         "returns": "Promise<{ signature: string; }>",
         "tags": [],
-        "docs": "Converts a payload to a SHA256 HMAC signature using a secret key.",
+        "docs": "",
         "complexTypes": [],
         "slug": "tosha256string"
       }

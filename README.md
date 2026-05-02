@@ -20,6 +20,8 @@ npx cap sync
 * [`authenticate(...)`](#authenticate)
 * [`initAuthentication()`](#initauthentication)
 * [`clearAuthentication()`](#clearauthentication)
+* [`authenticateWithOtp(...)`](#authenticatewithotp)
+* [`generateOtp(...)`](#generateotp)
 * [`toSha256String(...)`](#tosha256string)
 
 </docgen-index>
@@ -126,13 +128,45 @@ Clears the authentication session.
 --------------------
 
 
+### authenticateWithOtp(...)
+
+```typescript
+authenticateWithOtp(options: { otp: string; }) => Promise<{ authenticateWithOtp: string; }>
+```
+
+Authenticates using a one-time passcode after the SDK is configured.
+
+| Param         | Type                          |
+| ------------- | ----------------------------- |
+| **`options`** | <code>{ otp: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ authenticateWithOtp: string; }&gt;</code>
+
+--------------------
+
+
+### generateOtp(...)
+
+```typescript
+generateOtp(options: { baseUrl: string; apiKey: string; secret: string; externalId: string; }) => Promise<{ generateOtp: string; }>
+```
+
+Requests an OTP from the TruVideo HTTP API (HMAC-signed body).
+
+| Param         | Type                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ baseUrl: string; apiKey: string; secret: string; externalId: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ generateOtp: string; }&gt;</code>
+
+--------------------
+
+
 ### toSha256String(...)
 
 ```typescript
 toSha256String(options: { secretKey: string; payload: string; }) => Promise<{ signature: string; }>
 ```
-
-Converts a payload to a SHA256 HMAC signature using a secret key.
 
 | Param         | Type                                                 |
 | ------------- | ---------------------------------------------------- |
